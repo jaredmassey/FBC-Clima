@@ -31,3 +31,5 @@ class WeatherModel {
     }
   }
 }
+
+//'https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey'
