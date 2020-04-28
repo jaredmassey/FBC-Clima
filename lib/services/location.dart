@@ -6,7 +6,6 @@ class Location {
   double get latitude => _lastPosition.latitude;
   double get longitude => _lastPosition.longitude;
   Location() {
-//    this._geolocator = Geolocator()..forceAndroidLocationManager = true;
     this._geolocator = Geolocator();
     this.updateCurrentPosition();
   }

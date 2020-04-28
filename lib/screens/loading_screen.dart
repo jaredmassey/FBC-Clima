@@ -1,7 +1,8 @@
-import 'package:clima/services/networking.dart';
+import 'package:clima/screens/location_screen.dart';
+import 'package:clima/services/weather.dart';
 import 'package:flutter/material.dart';
-import 'package:clima/services/location.dart';
 import 'package:clima/utilities/constants.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -9,47 +10,28 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  Location _location;
   @override
   void initState() {
-    _location = Location();
     super.initState();
+    getLocationData();
   }
 
-//  void getWeatherDataByLatLong(Location location) async {
-//
-//      double temp = jsonDecode(data)['main']['temp'];
-//      String cityName = jsonDecode(data)['name'];
-//      int weatherCondition = jsonDecode(data)['weather'][0]['id'];
-//      print(
-//          'temp: $temp\ncityName: $cityName\nweatherCondition: $weatherCondition');
-//      print('\n\n');
-//      print('status: ${response.statusCode}\nbody: ${response.body}');
-//    } else {
-//      print('status: ${response.statusCode}\nbody: ${response.body}');
-//    }
-//  }
-
   void getLocationData() async {
-    await _location.updateCurrentPosition();
-    NetworkHelper networkHelper = NetworkHelper(
-        'https://api.openweathermap.org/data/2.5/weather?lat=${_location.latitude}&lon=${_location.longitude}&appid=$apiKey');
-    print('lat: ${_location.latitude}\nlong: ${_location.longitude}');
-    var weatherData = await networkHelper.getData(_location);
-    double temp = weatherData['main']['temp'];
-    String cityName = weatherData['name'];
-    int weatherCondition = weatherData['weather'][0]['id'];
+    var weatherData = await WeatherModel().getLocationWeather();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      return LocationScreen(
+        locationWeather: weatherData,
+      );
+    }));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            getLocationData();
-          },
-          child: Text('Get Location'),
+        child: SpinKitPulse(
+          color: Colors.white,
+          size: 150.0,
         ),
       ),
     );
